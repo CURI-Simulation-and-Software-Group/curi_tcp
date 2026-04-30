@@ -7,10 +7,10 @@ endif()
 
 ###################################Add library###########################################
 add_library(CURI_TCP_LIB
-    ${CMAKE_CURRENT_SOURCE_DIR}/tcp.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/curi_tcp.c
 )
 target_include_directories(CURI_TCP_LIB PUBLIC 
-    ${CMAKE_CURRENT_SOURCE_DIR}
+    ${CMAKE_CURRENT_SOURCE_DIR}/src
 )
 
 ###################################Generate Executable###################################
@@ -18,9 +18,15 @@ target_include_directories(CURI_TCP_LIB PUBLIC
 if(CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
     link_libraries(CURI_TCP_LIB)
     add_executable(client
-        ${CMAKE_CURRENT_SOURCE_DIR}/client.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/example/client.c
+    )
+    add_executable(client1
+        ${CMAKE_CURRENT_SOURCE_DIR}/example/client1.c
+    )
+    add_executable(server_nonstop
+        ${CMAKE_CURRENT_SOURCE_DIR}/example/server_nonstop.c
     )
     add_executable(server
-        ${CMAKE_CURRENT_SOURCE_DIR}/server.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/example/server.c
     )
 endif()

@@ -1,4 +1,4 @@
-#include "tcp.h"
+#include "curi_tcp.h"
 
 int main() {
     tcp_node sdk;
@@ -23,7 +23,10 @@ int main() {
     } else {
         printf("No response or timeout.\n");
     }
-
+    
+    printf("Wait for 5 sec.\n");
+    sleep(5);
+    printf("Going to Close.\n");
     tcp_close(&sdk);
     printf("Connection Closed.\n");
     return 0;
