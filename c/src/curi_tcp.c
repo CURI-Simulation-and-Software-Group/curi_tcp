@@ -31,7 +31,7 @@ int tcp_init(tcp_node* p, char server_ip[], int server_port, int buffer_size, bo
         p->server_addr.sin_addr.s_addr = (server_ip && strlen(server_ip) > 0) ? inet_addr(server_ip) : INADDR_ANY;
         
         if (bind(p->server_fd, (struct sockaddr*)&(p->server_addr), sizeof(p->server_addr)) == -1) {
-            perror("bind error");
+            fprintf(stderr, "bind error on ip %s and port %d: %s\n", server_ip, server_port, strerror(errno));
             #ifdef WIN32
                 closesocket(p->server_fd);
             #else
@@ -60,9 +60,9 @@ int tcp_server_wait_client(tcp_node* p, int timeout_usec, int buffer_size){
     FD_ZERO(&(p->rset)); // Must clear and reset every time
     FD_SET(p->server_fd, &(p->rset));
     
+    struct timeval t;
     struct timeval* t_ptr = NULL;
     if (timeout_usec >= 0){
-        struct timeval t;
         t.tv_sec = timeout_usec / 1000000;
         t.tv_usec = timeout_usec % 1000000;
         t_ptr = &t;
@@ -130,15 +130,19 @@ int tcp_select(tcp_node* p, int timeout_usec, int buffer_size){
 
     int nready = select(p->client_fd + 1, &(p->rset), NULL, NULL, &t);
     
+    p->receive_size = 0;
     if (nready > 0 && FD_ISSET(p->client_fd, &(p->rset))) {
         memset(p->receive_buffer, 0, buffer_size);
-        p->receive_size = recv(p->client_fd, p->receive_buffer, buffer_size, 0);
+        int bytes = recv(p->client_fd, p->receive_buffer, buffer_size, 0);
         // If recv returns 0, the robot disconnected
-        if (p->receive_size <= 0) return -1; 
-    } else {
-        p->receive_size = 0;
+        if (bytes > 0){
+            p->receive_size = bytes;
+        }
+        return bytes;
+    }else if (nready < 0){
+        return -3; // An actual error occurred
     }
-    return p->receive_size;
+    return -4; // Timeout of select
 }
 
 void tcp_send(tcp_node* p, int buffer_size){

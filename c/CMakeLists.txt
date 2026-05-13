@@ -6,17 +6,22 @@ if(CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
 endif()
 
 ###################################Add library###########################################
-add_library(CURI_TCP_LIB
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/curi_tcp.c
+add_library(curi_tcp 
+    ${CMAKE_CURRENT_SOURCE_DIR}/curi_tcp.c
 )
-target_include_directories(CURI_TCP_LIB PUBLIC 
-    ${CMAKE_CURRENT_SOURCE_DIR}/src
+
+target_include_directories(curi_tcp PUBLIC 
+    ${CMAKE_CURRENT_SOURCE_DIR}
 )
+
+# Modernized modern target aliases
+add_library(curi::tcp ALIAS curi_tcp)
+
 
 ###################################Generate Executable###################################
 #Generate Executable if this CMakeLists isn't a subdirectory 
 if(CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
-    link_libraries(CURI_TCP_LIB)
+    link_libraries(curi::tco)
     add_executable(client
         ${CMAKE_CURRENT_SOURCE_DIR}/example/client.c
     )
