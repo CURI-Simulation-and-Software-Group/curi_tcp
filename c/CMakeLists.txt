@@ -7,11 +7,11 @@ endif()
 
 ###################################Add library###########################################
 add_library(curi_tcp 
-    ${CMAKE_CURRENT_SOURCE_DIR}/curi_tcp.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/curi_tcp.c
 )
 
 target_include_directories(curi_tcp PUBLIC 
-    ${CMAKE_CURRENT_SOURCE_DIR}
+    ${CMAKE_CURRENT_SOURCE_DIR}/src
 )
 
 # Modernized modern target aliases
