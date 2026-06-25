@@ -1,3 +1,15 @@
+#if defined(_WIN32) || defined(WIN32)
+    #define _CRT_SECURE_NO_WARNINGS
+    #define WIN32_LEAN_AND_MEAN
+    #include <windows.h>
+    #define msleep(ms) Sleep(ms)       // Windows expects ms directly
+#else
+    #include <unistd.h>
+    #define msleep(ms) usleep(ms * 1000) // Linux converts ms to microseconds
+#endif
+#include <stdio.h>
+#include <string.h>
+
 #include "curi_tcp.h"
 
 int main() {
@@ -28,4 +40,4 @@ int main() {
     tcp_close(&sdk);
     printf("Connection Closed.\n");
     return 0;
-}
+} 

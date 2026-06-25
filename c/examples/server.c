@@ -26,7 +26,7 @@ int main() {
             // Send feedback
             strcpy(robot.send_buffer, "COMMAND_DONE");
             tcp_send(&robot, buf_size);
-        } else if (bytes < 0) {
+        } else if (bytes <= 0 && bytes != -4) {
             printf("SDK Disconnected.\n");
             break;
         }

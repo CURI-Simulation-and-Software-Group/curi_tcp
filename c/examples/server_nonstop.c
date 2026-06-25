@@ -22,6 +22,9 @@ int main() {
                 printf("Error waiting for client: %d\n", ret);
                 break;
             }else if (ret == 0){
+                printf("client addr: %s:%d\n",
+                    inet_ntoa(robot.client_addr.sin_addr),
+                    ntohs(robot.client_addr.sin_port));
                 printf("Client connected. Waiting for commands...\n");
             }
         }else{
@@ -34,7 +37,7 @@ int main() {
                 // Send feedback
                 strcpy(robot.send_buffer, "COMMAND_DONE");
                 tcp_send(&robot, buf_size);
-            } else if (bytes < 0) {
+            } else if (bytes <= 0 && bytes != -4) {
                 printf("Client disconnected.\n");
                 tcp_server_clear_client(&robot);
             }
