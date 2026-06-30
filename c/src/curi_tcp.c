@@ -26,6 +26,7 @@ static void curi_tcp_wsa_cleanup(void)
 	#include <unistd.h>
 	#include <sys/time.h>
 	#include <errno.h>
+	#include <fcntl.h>
 	#define CURI_TCP_INVALID_FD (-1)
 	#define CURI_TCP_IS_INVALID_FD(fd) ((fd) < 0)
 	#define CURI_TCP_FAILED(ret) ((ret) < 0)
