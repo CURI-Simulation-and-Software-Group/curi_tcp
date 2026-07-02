@@ -224,7 +224,7 @@ int tcp_server_has_client(tcp_node* p){
 
 int tcp_server_get_client_info(tcp_node* p, char ip[], int port){
 	if (!tcp_server_has_client(p)) return -1;
-	inet_ntop(AF_INET, &(p->client_addr.sin_addr), ip, sizeof(ip));
+	inet_ntop(AF_INET, &(p->client_addr.sin_addr), ip, INET_ADDRSTRLEN);
 	port = ntohs(p->client_addr.sin_port);
 	return 0;
 }
