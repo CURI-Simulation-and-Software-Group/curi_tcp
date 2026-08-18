@@ -5,6 +5,7 @@ project(curi_tcp LANGUAGES C)
 ###################################Add library###########################################
 add_library(curi_tcp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/curi_tcp.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/curi_tcp_framed.c
 )
 
 target_include_directories(curi_tcp PUBLIC
