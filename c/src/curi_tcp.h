@@ -60,6 +60,9 @@ extern "C"
 #endif
 
 int  tcp_init(tcp_node* p, const char* server_ip, int server_port, int buffer_size, bool is_server);
+/** Like tcp_init; client_connect_timeout_usec < 0 uses CURI_TCP_DEFAULT_CONNECT_TIMEOUT_USEC. */
+int  tcp_init_ex(tcp_node* p, const char* server_ip, int server_port, int buffer_size, bool is_server,
+                int client_connect_timeout_usec);
 int  tcp_select(tcp_node* p, int timeout_usec, int buffer_size);
 void tcp_send(tcp_node* p, int buffer_size);
 /** Send raw bytes (handles partial send). @return 0 on success, negative on error. */

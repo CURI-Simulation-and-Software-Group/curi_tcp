@@ -301,6 +301,12 @@ int tcp_read_exact(tcp_node* p, uint8_t* out, uint32_t len, int timeout_usec)
 }
 
 int tcp_init(tcp_node* p, const char* server_ip, int server_port, int buffer_size, bool is_server){
+	return tcp_init_ex(p, server_ip, server_port, buffer_size, is_server,
+	                   CURI_TCP_DEFAULT_CONNECT_TIMEOUT_USEC);
+}
+
+int tcp_init_ex(tcp_node* p, const char* server_ip, int server_port, int buffer_size, bool is_server,
+                int client_connect_timeout_usec){
 	int return_code = 0;
 #if defined(_WIN32) || defined(WIN32)
 	if (curi_tcp_wsa_acquire() != 0) {
@@ -355,11 +361,14 @@ int tcp_init(tcp_node* p, const char* server_ip, int server_port, int buffer_siz
 			goto cleanup_all;
 		}
 
+		const int connect_timeout = client_connect_timeout_usec < 0
+			? CURI_TCP_DEFAULT_CONNECT_TIMEOUT_USEC
+			: client_connect_timeout_usec;
 		const int connect_ret = curi_tcp_connect_with_timeout(
 			p->server_fd,
 			(struct sockaddr*)&p->server_addr,
 			sizeof(p->server_addr),
-			CURI_TCP_DEFAULT_CONNECT_TIMEOUT_USEC);
+			connect_timeout);
 		if (connect_ret != 0) {
 			fprintf(stderr, "connect error on ip %s and port %d: error %d\n",
 				server_ip ? server_ip : "0.0.0.0", server_port, curi_tcp_socket_errno());
